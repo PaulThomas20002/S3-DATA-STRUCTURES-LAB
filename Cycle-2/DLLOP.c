@@ -13,7 +13,7 @@ void Displayf(){
 	else{
 		temp = start;
 		while(temp != NULL){
-			printf("\n%d" temp->info);
+			printf("\n%d" ,temp->info);
 			temp = temp->next;
 		}
 	}
@@ -31,7 +31,7 @@ void Displayr(){
         	}
        
 		while(temp != NULL){ 	
-			printf("\n%d" temp->info);
+			printf("\n%d" ,temp->info);
 			temp = temp->prev;
         	}
 
