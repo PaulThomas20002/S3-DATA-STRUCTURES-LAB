@@ -13,7 +13,7 @@ void Displayf(){
 	else{
 		temp = start;
 		while(temp != NULL){
-			printf("\nData = %d", temp->info);
+			printf("\n%d" temp->info);
 			temp = temp->next;
 		}
 	}
@@ -27,12 +27,15 @@ void Displayr(){
 		printf("\nList is Empty");
     else{
         while(temp->next != NULL){
+        	printf("\n%d" temp->info);
         	temp = temp->next;
         	}
-		while(temp != NULL){ //problem found here tryin to solve
-			printf("\nData = %d", temp->info);
+       
+		while(temp != NULL){ 	
+
 			temp = temp->prev;
         	}
+
 
     	}
 }
@@ -41,11 +44,15 @@ void InsertAtStart(){
 	struct node *temp;
 	int data;
 	temp = (struct node *)malloc(sizeof(struct node));
+	
+
 	printf("Enter the data : ");
 	scanf("%d", &data);
 	temp->info = data;
 	temp->prev = NULL;
 	temp->next = start;
+	if(start != NULL)
+	start->prev = temp;
 	start = temp;
 }
 
@@ -53,11 +60,11 @@ void InsertAtEnd(){
 	struct node *temp, *trav;
 	int data;
 	temp = (struct node *)malloc(sizeof(struct node));
+	temp->next = NULL;
+	temp->prev = NULL;
 	printf("Enter the data : ");
 	scanf("%d", &data);
 	temp->info = data;
-	temp->next = NULL;
-	temp->prev = NULL;
 	trav = start;
 	if(trav == NULL){
 		start = temp;
@@ -71,34 +78,47 @@ void InsertAtEnd(){
 }
 
 void InsertAtPos(){
-	struct node *temp, *newnode;
-	int data, pos, i=1;
-	newnode = (struct node *)malloc(sizeof(struct node));
-	newnode->next = NULL;
-	newnode->prev = NULL;
-	printf("\nEnter the Position : ");
-	scanf("%d", &pos);
-	if(start == NULL){
-		start = newnode;
-		newnode->prev = NULL;
-		newnode->next = NULL;
-	}
-	else if(pos == 1)
-			InsertAtStart();
-	else{
-			printf("Enter the data : ");
-			scanf("%d", &data);
-			newnode->info = data;
-			temp = start;
-			while(i<pos - 1){
-				temp = temp->next;
-				i++;
-			}
-			newnode->next = temp->next;
-			newnode->prev = temp;
-			temp->next = newnode;
-			temp->next->prev = newnode;
-	}
+	int data, pos, i = 1;
+    struct node *temp, *newnode;
+    newnode = malloc(sizeof(struct node));
+    newnode->next = NULL;
+    newnode->prev = NULL;
+ 
+    
+    printf("\nEnter position : ");
+    scanf("%d", &pos);
+    printf("\nEnter number to be inserted: ");
+    scanf("%d", &data);
+    newnode->info = data;
+    temp = start;
+ 
+   
+    if (start == NULL) {
+        start = newnode;
+        newnode->prev = NULL;
+        newnode->next = NULL;
+    }
+ 
+    
+    else if (pos == 1) {
+        newnode->next = start;
+        newnode->next->prev = newnode;
+        newnode->prev = NULL;
+        start = newnode;
+    }
+ 
+    
+    else {
+        while (i < pos - 1) {
+            temp = temp->next;
+            i++;
+        }
+        newnode->next = temp->next;
+        newnode->prev = temp;
+        temp->next = newnode;
+        temp->next->prev = newnode;
+    }
+   
 }
 
 void DelAtStart(){
