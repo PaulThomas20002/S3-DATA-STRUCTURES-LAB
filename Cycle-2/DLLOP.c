@@ -6,7 +6,6 @@ struct node{
 	struct node *prev, *next;
 };
 struct node *start;
-
 void Displayf(){
 	struct node *temp;
 	if(start == NULL)
@@ -20,16 +19,17 @@ void Displayf(){
 	}
 }
 
-void Displayr(){    //error here try to correct it
+
+void Displayr(){
 	struct node *temp;
 	temp = start;
 	if(start == NULL)
 		printf("\nList is Empty");
     else{
-        while(temp->next != NULL) //try temp->next here instead of temp
+        while(temp->next != NULL){
         	temp = temp->next;
-  
-		while(temp != NULL){
+        	}
+		while(temp != NULL){ //problem found here tryin to solve
 			printf("\nData = %d", temp->info);
 			temp = temp->prev;
         	}
@@ -156,6 +156,7 @@ int main(){
 
 	int main, sub;
 	do{
+		menu:
 		printf("\nMenu\n1.Insertion\n2.Deletion\n3.Traversal\n4.Exit\n");
 		scanf("%d", &main);
 		switch(main){
@@ -169,8 +170,8 @@ int main(){
 					 			 break;
 					 	case 3 : InsertAtPos();
 					 			 break;
-					 	case 4 : printf("Moving to next Sub-Menu");
-					 			 break;
+					 	case 4 : printf("Moving to next Menu");
+					 			 goto menu;
 					 	default : printf("\nTry again...\n");
 					 			 
 					  }
@@ -185,8 +186,8 @@ int main(){
 					 			 break;
 					 	case 3 : DelAtPos();
 					 			 break;
-					 	case 4 : printf("Moving to next Sub-Menu");
-					 			 break;
+					 	case 4 : printf("Moving to next Menu");
+					 			 goto menu;
 					 	default : printf("\nTry again...\n");
 					 	}
 					 }while(sub != 4);
@@ -198,11 +199,14 @@ int main(){
 									 break;
 							case 2 : Displayr();
 									 break;
-							case 3 : printf("Moving to next Sub-Menu");
-									 break;
+							case 3 : printf("Moving to next Menu");
+									 goto menu;
 							default : printf("\nTry again...\n");
 							}
 					}while(sub != 3);
+
+			case 4 : printf("Aborting....");
+					 break;
 		    default : printf("\nTry again");
 		    }
 	}while(main != 4);
