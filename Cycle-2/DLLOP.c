@@ -27,12 +27,11 @@ void Displayr(){
 		printf("\nList is Empty");
     else{
         while(temp->next != NULL){
-        	printf("\n%d" temp->info);
-        	temp = temp->next;
+        	   	temp = temp->next;
         	}
        
 		while(temp != NULL){ 	
-
+			printf("\n%d" temp->info);
 			temp = temp->prev;
         	}
 
