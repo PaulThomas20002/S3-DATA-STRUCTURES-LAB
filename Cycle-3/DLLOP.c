@@ -26,7 +26,7 @@ void Displayr(){    //error here try to correct it
 	if(start == NULL)
 		printf("\nList is Empty");
     else{
-        while(temp != NULL) //try temp->next here instead of temp
+        while(temp->next != NULL) //try temp->next here instead of temp
         	temp = temp->next;
   
 		while(temp != NULL){
