@@ -6,6 +6,7 @@ struct node{
 	struct node *prev, *next;
 };
 struct node *start;
+int count=0;
 void Displayf(){
 	struct node *temp;
 	if(start == NULL)
@@ -27,12 +28,13 @@ void Displayr(){
 		printf("\nList is Empty");
     else{
         while(temp->next != NULL){
-        	   	temp = temp->next;
+        	
+        	temp = temp->next;
         	}
        
 		while(temp != NULL){ 	
-			printf("\n%d" ,temp->info);
-			temp = temp->prev;
+			printf("\n%d", temp->info);
+        	temp = temp->prev;
         	}
 
 
@@ -43,7 +45,7 @@ void InsertAtStart(){
 	struct node *temp;
 	int data;
 	temp = (struct node *)malloc(sizeof(struct node));
-	
+	count++;
 
 	printf("Enter the data : ");
 	scanf("%d", &data);
@@ -51,7 +53,7 @@ void InsertAtStart(){
 	temp->prev = NULL;
 	temp->next = start;
 	if(start != NULL)
-	start->prev = temp;
+		start->prev = temp;
 	start = temp;
 }
 
@@ -59,6 +61,7 @@ void InsertAtEnd(){
 	struct node *temp, *trav;
 	int data;
 	temp = (struct node *)malloc(sizeof(struct node));
+	count++;
 	temp->next = NULL;
 	temp->prev = NULL;
 	printf("Enter the data : ");
@@ -73,6 +76,7 @@ void InsertAtEnd(){
 			trav = trav->next;
 		temp->prev = trav;
 		trav->next = temp;
+	
 	}
 }
 
@@ -82,42 +86,45 @@ void InsertAtPos(){
     newnode = malloc(sizeof(struct node));
     newnode->next = NULL;
     newnode->prev = NULL;
- 
     
-    printf("\nEnter position : ");
+   	printf("\nEnter position : ");
     scanf("%d", &pos);
     printf("\nEnter number to be inserted: ");
     scanf("%d", &data);
     newnode->info = data;
     temp = start;
- 
-   
+    
     if (start == NULL) {
         start = newnode;
         newnode->prev = NULL;
         newnode->next = NULL;
+        count++;
     }
- 
-    
     else if (pos == 1) {
         newnode->next = start;
         newnode->next->prev = newnode;
         newnode->prev = NULL;
         start = newnode;
+        count++;
     }
- 
+    else if(pos == count+1){
+            printf("\nSorry No newnode created.\nUse Insert At End Function.");free(newnode);}
+    else if (count < pos){
+            printf("\nSorry No newnode created.\nOnly %d elements are entered", count);free(newnode);}
     
-    else {
+    else if(pos > 1){
         while (i < pos - 1) {
             temp = temp->next;
             i++;
         }
         newnode->next = temp->next;
+     	newnode->next->prev = newnode;
+     	temp->next = newnode;
         newnode->prev = temp;
-        temp->next = newnode;
-        temp->next->prev = newnode;
-    }
-   
+        count++;
+    	}
+    else
+    	printf("\n No node created");
 }
 
 void DelAtStart(){
@@ -130,6 +137,7 @@ void DelAtStart(){
 		start = start->next;
 		start->prev = NULL;
 		free(temp);
+		count--;
 	}
 }
 
@@ -145,6 +153,7 @@ void DelAtEnd(){
 	else{
 		temp->prev->next = NULL;
 		free(temp);
+		count--;
 		}
 	}
 }
@@ -169,6 +178,7 @@ void DelAtPos(){
 			position->next->prev = temp;
 		temp->next = position->next;
 		free(position);
+		count--;
 	}
 }
 int main(){
