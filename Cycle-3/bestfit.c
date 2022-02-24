@@ -84,4 +84,4 @@ temp = temp->link;
 }
 printf("\n");
 }
-OUTPUT:
+
