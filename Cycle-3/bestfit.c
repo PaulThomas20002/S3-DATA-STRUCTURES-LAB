@@ -1,87 +1,133 @@
 #include<stdio.h>
 #include<stdlib.h>
-struct node {
-int size;
-struct node *link;
+
+struct node{
+    int data;
+    struct node *n_link;
 };
-struct node *readData();
-void allocate(struct node **, struct node **);
-void printList(struct node *);
-int main(){
-struct node *block, *process, *temp, *prev, *bestprev, *besttemp, *head;
-block = process = NULL;
-int bsize, psize, size;
-printf("Enter no. of blocks: ");
-scanf("%d", &bsize);
-for(int i = 0; i < bsize; i++){
-head = readData();
-allocate(&block, &head);
-}
-printf("Enter no. of process: ");
-scanf("%d", &psize);
-if(psize > bsize){
-printf("Allocation not possible\n");
-return 0;
-}
-for(int i = 0; i < psize; i++){
-printf("Enter the Size: ");
-scanf("%d", &size);
-int dif = 1000;
-prev = bestprev = besttemp = NULL;
-temp = block;
-while(temp!=NULL){
-if(dif > temp->size - size && temp->size - size >= 0){
-bestprev = prev;
-besttemp = temp;
-dif = temp->size - size;
-}
-prev = temp;
-temp = temp->link;
-}
-if(besttemp == block)
-block = block->link;
-else if(besttemp == NULL){
-printf("Couldnt Allocate %d\n\n", size);
-continue;
-}
-else
-bestprev->link = besttemp->link;
 
-printf("%d Allocated to %d block\n\n", size, besttemp->size);
-allocate(&process, &besttemp);
-}
-printf("Block List: ");
-printList(block);
-printf("Process List: ");
-printList(process);
-return 0;
-}
-struct node *readData(){
-struct node *new;
-new = (struct node*)malloc(sizeof(struct node));
-printf("Enter the Size: ");
-scanf("%d", &new->size);
-new->link = NULL;
-return new;
-}
-void allocate(struct node **start, struct node **head){
-struct node *new = *head;
-new->link = NULL;
-if(*start == NULL)
-*start = new;
-else{
-struct node *temp = *start;
-while(temp->link!=NULL)
-temp = temp->link;
-temp->link = new;
-}
-}
-void printList(struct node *start){
-struct node *temp = start;
-while(temp!=NULL){
-printf("%d ", temp->size);
-temp = temp->link;
-}
-printf("\n");
+struct node *avail = NULL,*current_node, *new_node, *prev, *temp, *smallest_add;
+int bal = 0, smallest = 0, best, count = 0;
+int n_blocks, n_process, block, process;
+
+struct node *get_node(int ele){
+    temp = (struct node *)malloc(sizeof(struct node));
+    if(temp == NULL)
+        return NULL;
+    else{
+        temp->data = ele;
+        temp->n_link = NULL;
+    }
+    return temp;
 }
 
+void insert(int ele){
+    new_node = get_node(ele);
+    if(new_node != NULL){
+        if(avail == NULL)
+            avail = new_node;
+        else{
+            current_node = avail;
+            while(current_node->n_link != NULL){
+                current_node = current_node->n_link;
+            }
+            current_node->n_link = new_node;
+            }
+    }
+    else{
+    printf("No Node Created");
+    }
+}
+
+void display(){
+    printf("Avail List\n");
+    current_node = avail;
+
+    while(current_node != NULL){
+        printf("%d", current_node->data);
+        current_node = current_node->n_link;
+        if(current_node != NULL){
+            printf("-->");
+        }
+    }
+}
+
+void delete(struct node *address){
+    prev = avail;
+    current_node = prev->n_link;
+    
+        while(current_node != NULL && current_node != address){
+            count++;
+            current_node = current_node->n_link;
+            prev = prev->n_link;
+        }
+        if(current_node != NULL){
+            prev->n_link = current_node->n_link;
+            free(current_node);
+        }
+        else if(current_node == NULL && count == 0){
+            avail = NULL;
+            free(current_node);
+        }
+        else if(current_node == NULL){
+            prev->n_link = NULL;
+            free(current_node);
+        }
+        count=0;
+}
+
+int allocate(int process){
+ current_node = avail;
+ smallest = 10000;
+ best = 0;
+ while(current_node != NULL){
+    bal = current_node->data-process;
+    if(smallest > bal && bal >= 0){
+        smallest = bal;
+        smallest_add = current_node;
+        best = current_node->data;
+    }
+    current_node = current_node->n_link;
+}   
+    if(smallest_add == avail){
+        avail = smallest_add->n_link;
+        free(smallest_add);
+    }
+    else
+    delete(smallest_add);
+return best;
+}
+
+void main(){
+    printf("\nEnter the number of blocks required : ");
+    scanf("%d", &n_blocks);
+    LABEL:
+        printf("Enter the number of process : ");
+        scanf("%d", &n_process);
+    int a[n_process];
+    if(n_process>n_blocks){
+        printf("Only %d blocks available\n",n_blocks);
+        goto LABEL;
+    }
+    else{
+        for(int i=1;i<=n_blocks;i++){
+            printf("Enter block Size %d : ",i);
+            scanf("%d",&block);
+            insert(block);
+        }
+    }
+    printf("\n");
+    for(int i=1;i<=n_process;i++){
+        printf("Enter process Size %d : ",i);
+        scanf("%d",&process);
+        a[i]=process;
+    }
+    display();
+    for(int i=1;i<=n_process;i++){
+        int best_space=allocate(a[i]);
+        if(best_space==0)
+            printf("\nLack of space for allocating %d\n",a[i]);
+        else
+            printf("\n%d is allocates at %d\n",a[i],best_space);
+    }
+}
