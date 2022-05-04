@@ -18,18 +18,21 @@ void enqueue(int data,int p)//Enqueue function to insert data and its priority i
 		}
 		else if(r == N-1)//if there there is some elemets in Queue
 		{
-			for(i=f;i<=r;i++) { Q[i-f] = Q[i]; Pr[i-f] = Pr[i]; r = r-f; f = 0; for(i = r;i>f;i--)
-				{
-					if(p>Pr[i])
-					{
+			for(i=f;i<=r;i++) { 
+				Q[i-f] = Q[i]; 
+				Pr[i-f] = Pr[i]; 
+				r = r-f; 
+				f = 0; 
+				for(i = r;i>f;i--){
+					if(p>Pr[i]){
 						Q[i+1] = Q[i];
 						Pr[i+1] = Pr[i];
 					}
 					else
 						break;
-					Q[i+1] = data;
-					Pr[i+1] = p;
-					r++;
+				Q[i+1] = data;
+				Pr[i+1] = p;
+				r++;
 				}
 			}
 		}
